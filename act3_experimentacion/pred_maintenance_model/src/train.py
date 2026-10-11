@@ -106,14 +106,14 @@ def parse_arguments():
 
 #Funciones para experimento MLFlow
 def reg_dataset_mlflow(maintenance_df):
-        """Registrar el dataset en MLFlow."""
-        dataset = mlflow.data.from_pandas(
-        maintenance_df,
-        source=CSV_PATH,
-        name="ai4i2020_predictive_maintenance",
-        targets=TARGET
-        )
-        mlflow.log_input(dataset, context="training")
+    """Registrar el dataset en MLFlow."""
+    dataset = mlflow.data.from_pandas(
+    maintenance_df,
+    source=CSV_PATH,
+    name="ai4i2020_predictive_maintenance",
+    targets=TARGET
+    )
+    mlflow.log_input(dataset, context="training")
 
 #Artefactos
 def plot_confusion_matrix(y_test, y_pred):
@@ -128,16 +128,15 @@ def plot_confusion_matrix(y_test, y_pred):
     mlflow.log_figure(disp.figure_, "confusion_matrix.png")
     plt.close(disp.figure_)
 
-def plot_prc_curve(y_test, y_pred_proba, y_pred):
-    """Carga la curva de PRC-AUC a MLFlow"""
+def plot_prc_curve(y_test, y_pred_proba, metrics):
+    """Registra en MLflow la curva Precisión-Recall."""
     precision, recall, _ = precision_recall_curve(y_test, y_pred_proba)
     fig, ax = plt.subplots(figsize=(6, 5))
-    ax.plot(recall, precision,
-    label=f"PR-AUC = {average_precision_score(y_test, y_pred_proba):.3f}")
-    ax.scatter(recall_score(y_test, y_pred), precision_score(y_test, y_pred),
-        zorder=3, label="Umbral 0.5")          # umbral por defecto
+    ax.plot(recall, precision, label=f"PR-AUC = {metrics['test_pr_auc']:.3f}")
+    ax.scatter(metrics["test_recall"], metrics["test_precision"],
+               zorder=3, label="Umbral 0.5")
     ax.axhline(y_test.mean(), color="gray", linestyle="--",
-        label=f"Azar ({y_test.mean():.3f})")   # referencia de azar
+               label=f"Azar ({y_test.mean():.3f})")
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precisión")
     ax.set_title("Curva Precisión-Recall:")
@@ -182,11 +181,11 @@ def main():
         mlflow.log_metrics(metrics)
         
         plot_confusion_matrix(y_test, y_pred)
-        plot_prc_curve(y_test, y_pred_proba, y_pred)
+        plot_prc_curve(y_test, y_pred_proba, metrics)
         mlflow.sklearn.log_model(
             pipe,
             name="modelo",
-            signature=infer_signature(X_train, y_pred),
+            signature=infer_signature(X_test, y_pred),
             input_example=X_test.head(3),
             skops_trusted_types=["sklearn.tree._tree.Tree"],
         )

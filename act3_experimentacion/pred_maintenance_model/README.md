@@ -160,9 +160,19 @@ Prueba de reproducibilidad
 ```bash
 python src/train.py --run_name reprod_verification --description "Verificar la reproducibilidad"   
 ```
-Se fijaron parámetros como la semilla con valor 42 en la partición y en el modelo, el test_size se mantiene con la distribución 70%/30% y el class_weight se mantiene constante como 'balanced' para garantizar que las corridas sean reproducibles y se comprobó que la corrida da los mismos valores que el modelo base. 
-
-Al comprobar la reproducibilidad, tanto modelbase como reprod_verification dieron exactamente el mismo valor de PR-AUC (0.6958970295656021).
+### Controles de reproducibilidad
+- **Semilla:** `--seed` (por defecto 42) controla las dos fuentes de aleatoriedad:
+  la partición estratificada (`train_test_split`) y el `RandomForestClassifier`.
+- **Dependencias:** `requirements.txt` fija las versiones exactas (`==`) y el
+  proyecto se probó con Python 3.14.7.
+- **Datos:** cada corrida registra el *digest* del dataset en MLflow, lo que
+  permite verificar que se usó el mismo archivo `ai4i2020.csv`.
+- **Verificación:** se comprobó clonando el repositorio en un entorno limpio,
+  instalando `requirements.txt` y ejecutando el script; `modelbase` y
+  `reprod_verification` producen el mismo PR-AUC (0.6958970295656021).
+- **Alcance:** la igualdad exacta se garantiza con las mismas versiones de
+  Python y librerías; con versiones distintas de scikit-learn o numpy podrían
+  aparecer diferencias numéricas pequeñas.
 
 La semilla predeterminada es 42 y se utiliza tanto para la partición estratificada de los datos como para el Random Forest. Puede modificarse mediante --seed para analizar la sensibilidad de los resultados a la aleatoriedad. Para reproducir una corrida, deben mantenerse iguales los argumentos, los datos y las versiones de las dependencias.
 
@@ -178,5 +188,5 @@ La lógica se encapsuló en funciones independientes con responsabilidades únic
    * `evaluate_model()`: Recibe el pipeline y los datos de prueba `y_pred_proba` y `y_pred`   
    * `calc_metrics()`: Cálculo de métricas (`test_pr_auc`, `test_precision`, `test_recall`, `test_f1`).
    * `reg_dataset_mlflow()`: Registro del dataset como entrada de MLFlow.
-   * `plot_confusion_matriz()`: Genera la matriz de confusión de cada corrida.
-   * `plot_prc_curve()`: Genera la curva de PRC-AUC de cada corrida.
+   * `plot_confusion_matrix()`: Genera la matriz de confusión de cada corrida.
+   * `plot_prc_curve()`: Genera la curva de PR-AUC de cada corrida.
