@@ -44,20 +44,17 @@ simplificada para esta actividad.
 - `requirements.txt`: dependencias con versiones.
 - `notebooks/`: Notebooks versionados.
 
-## Dataset
-
-El archivo `ai4i2020.csv` no está incluido en el repositorio por temas de tamaño y versionado. Para obtenerlo:
-
-1. Descárgalo desde el [repositorio de UCI (AI4I 2020)](https://archive.ics.uci.edu/dataset/601/ai4i+2020+predictive+maintenance+dataset).
-2. Asegúrate de estar parado en la raíz de este proyecto (`pred_maintenance_model`) y crea la carpeta de destino:
-
-```bash
-mkdir -p data/raw
-```
-
 ## Cómo ejecutar
 
-### Crear entorno virtual
+### 1. Clonar el repositorio
+Abre tu terminal, clona el proyecto en tu equipo local e ingresa a la carpeta del proyecto:
+
+```bash
+git clone https://github.com/MarthaGar/MLOps.git
+cd MLOps/act3_experimentacion/pred_maintenance_model
+```
+
+### 2. Crear entorno virtual
 Se recomienda crear un entorno virtual para evitar conflictos con otras librerías:
 
 ```bash
@@ -71,35 +68,35 @@ source .venv/bin/activate
 .venv\Scripts\Activate.ps1
 ```
 
-### 1. Clonar el repositorio
-Abre tu terminal, clona el proyecto en tu equipo local e ingresa a la carpeta del proyecto:
-
-```bash
-git clone https://github.com/MarthaGar/MLOps.git
-cd MLOps/act3_experimentacion/pred_maintenance_model
-```
-
-### 2. Requisitos e instalación
+### 3. Requisitos e instalación
 * Desarrollado y probado en Python 3.14.7.
 
 Instalar las dependencias en el entorno activo:
 ```bash
 pip install -r requirements.txt
 ```
-### 3. Guardar dataset
+### 4. Guardar dataset
 
-Mueve o guarda el archivo descargado directamente en esa ruta: `data/raw/ai4i2020.csv`.
+El archivo `ai4i2020.csv` no está incluido en el repositorio por temas de tamaño y versionado. Para obtenerlo:
+
+1. Descárgalo desde el [repositorio de UCI (AI4I 2020)](https://archive.ics.uci.edu/dataset/601/ai4i+2020+predictive+maintenance+dataset).
+2. Asegúrate de estar parado en la raíz de este proyecto (`pred_maintenance_model`) y crea la carpeta de destino:
+
+```bash
+mkdir -p data/raw
+```
+3. Mueve o guarda el archivo descargado directamente en esa ruta: `data/raw/ai4i2020.csv`.
 
 (Nota: El archivo también se adjunta en la entrega de Canvas).
 
-### 4. Iniciar el servidor de MLFlow
+### 5. Iniciar el servidor de MLFlow
 
 En una terminal (con el entorno activo y ubicada en pred_maintenance_model):
 ```bash
 mlflow server --host 127.0.0.1 --port 8080
 ```
 
-### 5. Ejecutar el script de entrenamiento
+### 6. Ejecutar el script de entrenamiento
 En una segunda terminal (con el entorno activo y ubicada en pred_maintenance_model):
 ```bash
 python src/train.py
@@ -122,7 +119,7 @@ Si durante la ejecución existe alguna duda sobre los parámetros y su valor por
 python src/train.py --help
 ```
 
-### 6. Verificar registros en la interfaz de MLflow
+### 7. Verificar registros en la interfaz de MLflow
 Abrir <http://127.0.0.1:8080/> en el navegador para ver las corridas.
 
 ## Corridas realizadas
