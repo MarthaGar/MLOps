@@ -1,0 +1,15 @@
+#Python v3.14.7
+
+# Análisis de datos y EDA (Notebook)
+numpy==2.5.3
+pandas==3.0.6
+matplotlib==3.11.2
+seaborn==0.13.2
+ipykernel==7.4.0
+
+# Machine Learning y MLOps (script)
+scikit-learn==1.9.1
+mlflow==3.17.0
+
+# Utilidades
+python-dotenv==1.2.4
